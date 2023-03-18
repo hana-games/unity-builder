@@ -76,7 +76,7 @@ class BuildParameters {
   public githubChecks!: boolean;
   public cacheUnityInstallationOnMac!: boolean;
   public unityHubVersionOnMac!: string;
-  public workdirPath!: string;
+  public workdir!: string;
 
   static async create(): Promise<BuildParameters> {
     const buildFile = this.parseBuildFile(Input.buildName, Input.targetPlatform, Input.androidExportType);
@@ -84,11 +84,6 @@ class BuildParameters {
     const buildVersion = await Versioning.determineBuildVersion(Input.versioningStrategy, Input.specifiedVersion);
     const androidVersionCode = AndroidVersioning.determineVersionCode(buildVersion, Input.androidVersionCode);
     const androidSdkManagerParameters = AndroidVersioning.determineSdkManagerParameters(Input.androidTargetSdkVersion);
-    let workdirPathParameter = Input.workdirPath;
-
-    if (workdirPathParameter !== '') {
-      workdirPathParameter = '/github/workspace';
-    }
 
     const androidSymbolExportType = Input.androidSymbolType;
     if (Platform.isAndroid(Input.targetPlatform)) {
@@ -184,7 +179,7 @@ class BuildParameters {
       githubChecks: CloudRunnerOptions.githubChecks,
       cacheUnityInstallationOnMac: Input.cacheUnityInstallationOnMac,
       unityHubVersionOnMac: Input.unityHubVersionOnMac,
-      workdirPath: workdirPathParameter,
+      workdir: Input.workdir,
     };
   }
 
