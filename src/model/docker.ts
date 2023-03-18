@@ -36,7 +36,7 @@ class Docker {
     additionalVariables: any[] = [],
     entrypointBash: boolean = false,
   ): string {
-    const { workspace, actionFolder, runnerTempPath, sshAgent, gitPrivateToken } = parameters;
+    const { workspace, actionFolder, runnerTempPath, sshAgent, gitPrivateToken, allocation } = parameters;
 
     const githubHome = path.join(runnerTempPath, '_github_home');
     if (!existsSync(githubHome)) mkdirSync(githubHome);
@@ -52,13 +52,13 @@ class Docker {
             --env GITHUB_WORKSPACE=/github/workspace \
             ${gitPrivateToken ? `--env GIT_PRIVATE_TOKEN="${gitPrivateToken}"` : ''} \
             ${sshAgent ? '--env SSH_AUTH_SOCK=/ssh-agent' : ''} \
-            --volume "${githubHome}":"/root:z" \
-            --volume "${githubWorkflow}":"/github/workflow:z" \
-            --volume "${workspace}":"/github/workspace:z" \
-            --volume "${actionFolder}/default-build-script:/UnityBuilderAction:z" \
-            --volume "${actionFolder}/platforms/ubuntu/steps:/steps:z" \
-            --volume "${actionFolder}/platforms/ubuntu/entrypoint.sh:/entrypoint.sh:z" \
-            --volume "${actionFolder}/unity-config:/usr/share/unity3d/config/:z" \
+            --volume "${githubHome}${allocation}":"/root:z" \
+            --volume "${githubWorkflow}${allocation}":"/github/workflow:z" \
+            --volume "${workspace}${allocation}":"/github/workspace:z" \
+            --volume "${actionFolder}${allocation}/default-build-script:/UnityBuilderAction:z" \
+            --volume "${actionFolder}${allocation}/platforms/ubuntu/steps:/steps:z" \
+            --volume "${actionFolder}${allocation}/platforms/ubuntu/entrypoint.sh:/entrypoint.sh:z" \
+            --volume "${actionFolder}${allocation}/unity-config:/usr/share/unity3d/config/:z" \
             ${sshAgent ? `--volume ${sshAgent}:/ssh-agent` : ''} \
             ${sshAgent ? '--volume /home/runner/.ssh/known_hosts:/root/.ssh/known_hosts:ro' : ''} \
             ${entrypointBash ? `--entrypoint ${commandPrefix}` : ``} \

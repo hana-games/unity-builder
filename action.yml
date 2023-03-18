@@ -207,6 +207,10 @@ inputs:
     description:
       'The version of Unity Hub to install on MacOS (e.g. 3.4.0). Defaults to latest available on brew if empty string
       or nothing is specified.'
+  allocation:
+    default: '0'
+    required: false
+    description: Allocation use for the build when there multiple unity instances running on the same machine
 
 outputs:
   volume:

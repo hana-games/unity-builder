@@ -76,6 +76,7 @@ class BuildParameters {
   public githubChecks!: boolean;
   public cacheUnityInstallationOnMac!: boolean;
   public unityHubVersionOnMac!: string;
+  public allocation!: string;
 
   static async create(): Promise<BuildParameters> {
     const buildFile = this.parseBuildFile(Input.buildName, Input.targetPlatform, Input.androidExportType);
@@ -178,6 +179,7 @@ class BuildParameters {
       githubChecks: CloudRunnerOptions.githubChecks,
       cacheUnityInstallationOnMac: Input.cacheUnityInstallationOnMac,
       unityHubVersionOnMac: Input.unityHubVersionOnMac,
+      allocation: Input.allocation,
     };
   }
 

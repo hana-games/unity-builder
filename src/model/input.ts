@@ -225,6 +225,10 @@ class Input {
       .toUpperCase()
       .replace(/ /g, '_');
   }
+
+  static get allocation() {
+    return Input.getInput('allocation') || '';
+  }
 }
 
 export default Input;
