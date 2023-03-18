@@ -226,7 +226,7 @@ class Input {
       .replace(/ /g, '_');
   }
 
-  static get workdir() {
+  static get workdirPath() {
     return Input.getInput('workdir') || '';
   }
 }
