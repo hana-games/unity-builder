@@ -36,7 +36,7 @@ class Docker {
     additionalVariables: any[] = [],
     entrypointBash: boolean = false,
   ): string {
-    const { actionFolder, runnerTempPath, sshAgent, gitPrivateToken, workdir } = parameters;
+    const { workspace, actionFolder, runnerTempPath, sshAgent, gitPrivateToken } = parameters;
 
     const githubHome = path.join(runnerTempPath, '_github_home');
     if (!existsSync(githubHome)) mkdirSync(githubHome);
@@ -54,7 +54,7 @@ class Docker {
             ${sshAgent ? '--env SSH_AUTH_SOCK=/ssh-agent' : ''} \
             --volume "${githubHome}":"/root:z" \
             --volume "${githubWorkflow}":"/github/workflow:z" \
-            --volume "${workdir}":"/github/workspace:z" \
+            --volume "${workspace}":"/github/workspace:z" \
             --volume "${actionFolder}/default-build-script:/UnityBuilderAction:z" \
             --volume "${actionFolder}/platforms/ubuntu/steps:/steps:z" \
             --volume "${actionFolder}/platforms/ubuntu/entrypoint.sh:/entrypoint.sh:z" \

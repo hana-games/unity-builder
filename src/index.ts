@@ -13,8 +13,7 @@ async function runMain() {
     Action.checkCompatibility();
     Cache.verify();
 
-    // const { workspace, actionFolder } = Action;
-    const { actionFolder } = Action;
+    const { workspace, actionFolder } = Action;
 
     const buildParameters = await BuildParameters.create();
     const baseImage = new ImageTag(buildParameters);
@@ -27,8 +26,7 @@ async function runMain() {
       if (process.platform === 'darwin') {
         MacBuilder.run(actionFolder);
       } else {
-        // await Docker.run(baseImage, { workspace, actionFolder, ...buildParameters });
-        await Docker.run(baseImage, { actionFolder, ...buildParameters });
+        await Docker.run(baseImage, { workspace, actionFolder, ...buildParameters });
       }
     }
 
