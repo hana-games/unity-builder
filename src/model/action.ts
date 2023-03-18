@@ -29,9 +29,9 @@ class Action {
     return `${Action.rootFolder}/dist`;
   }
 
-  static get workspace() {
-    return process.env.GITHUB_WORKSPACE;
-  }
+  // static get workspace() {
+  //   return process.env.GITHUB_WORKSPACE;
+  // }
 
   static checkCompatibility() {
     const currentPlatform = process.platform;

@@ -225,6 +225,10 @@ class Input {
       .toUpperCase()
       .replace(/ /g, '_');
   }
+
+  static get workdirPath() {
+    return Input.getInput('workdir') || '';
+  }
 }
 
 export default Input;
