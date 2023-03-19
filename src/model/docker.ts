@@ -47,6 +47,11 @@ class Docker {
     if (!existsSync(githubWorkflow)) mkdirSync(githubWorkflow);
     const commandPrefix = image === `alpine` ? `/bin/sh` : `/bin/bash`;
 
+    const actionFolderFormat = actionFolder.replace('/tmp/runner', `/tmp/runner${allocation}`);
+    const workspaceFormat = workspace.replace('/tmp/runner', `/tmp/runner${allocation}`);
+    const githubWorkflowFormat = githubWorkflow.replace('/tmp/runner', `/tmp/runner${allocation}`);
+    const githubHomeFormat = githubHome.replace('/tmp/runner', `/tmp/runner${allocation}`);
+
     return `docker run \
             --workdir /github/workspace \
             --rm \
@@ -55,13 +60,13 @@ class Docker {
             --env GITHUB_WORKSPACE=/github/workspace \
             ${gitPrivateToken ? `--env GIT_PRIVATE_TOKEN="${gitPrivateToken}"` : ''} \
             ${sshAgent ? '--env SSH_AUTH_SOCK=/ssh-agent' : ''} \
-            --volume "${githubHome}${allocation}":"/root:z" \
-            --volume "${githubWorkflow}${allocation}":"/github/workflow:z" \
-            --volume "${workspace}${allocation}":"/github/workspace:z" \
-            --volume "${actionFolder}${allocation}/default-build-script:/UnityBuilderAction:z" \
-            --volume "${actionFolder}${allocation}/platforms/ubuntu/steps:/steps:z" \
-            --volume "${actionFolder}${allocation}/platforms/ubuntu/entrypoint.sh:/entrypoint.sh:z" \
-            --volume "${actionFolder}${allocation}/unity-config:/usr/share/unity3d/config/:z" \
+            --volume "${githubHomeFormat}":"/root:z" \
+            --volume "${githubWorkflowFormat}":"/github/workflow:z" \
+            --volume "${workspaceFormat}":"/github/workspace:z" \
+            --volume "${actionFolderFormat}/default-build-script:/UnityBuilderAction:z" \
+            --volume "${actionFolderFormat}/platforms/ubuntu/steps:/steps:z" \
+            --volume "${actionFolderFormat}/platforms/ubuntu/entrypoint.sh:/entrypoint.sh:z" \
+            --volume "${actionFolderFormat}/unity-config:/usr/share/unity3d/config/:z" \
             ${sshAgent ? `--volume ${sshAgent}:/ssh-agent` : ''} \
             ${sshAgent ? '--volume /home/runner/.ssh/known_hosts:/root/.ssh/known_hosts:ro' : ''} \
             ${entrypointBash ? `--entrypoint ${commandPrefix}` : ``} \
