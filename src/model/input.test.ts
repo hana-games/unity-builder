@@ -104,6 +104,45 @@ describe('Input', () => {
     });
   });
 
+  describe('versioningStrategy', () => {
+    it('returns the default value', () => {
+      expect(Input.versioningStrategy).toStrictEqual('Semantic');
+    });
+
+    it('takes input from the users workflow', () => {
+      const mockValue = 'Anything';
+      const spy = jest.spyOn(core, 'getInput').mockReturnValue(mockValue);
+      expect(Input.versioningStrategy).toStrictEqual(mockValue);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('specifiedVersion', () => {
+    it('returns the default value', () => {
+      expect(Input.specifiedVersion).toStrictEqual('');
+    });
+
+    it('takes input from the users workflow', () => {
+      const mockValue = '1.33.7';
+      const spy = jest.spyOn(core, 'getInput').mockReturnValue(mockValue);
+      expect(Input.specifiedVersion).toStrictEqual(mockValue);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('androidVersionCode', () => {
+    it('defaults to null', () => {
+      expect(Input.androidVersionCode).toBeFalsy();
+    });
+
+    it('takes input from the users workflow', () => {
+      const mockValue = '42';
+      const spy = jest.spyOn(core, 'getInput').mockReturnValue(mockValue);
+      expect(Input.androidVersionCode).toStrictEqual(mockValue);
+      expect(spy).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('androidAppBundle', () => {
     it('returns the default value', () => {
       expect(Input.androidAppBundle).toStrictEqual(false);

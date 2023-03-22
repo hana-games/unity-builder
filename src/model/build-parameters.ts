@@ -5,6 +5,7 @@ import CloudRunnerBuildGuid from './cloud-runner/services/cloud-runner-guid';
 import Input from './input';
 import Platform from './platform';
 import UnityVersioning from './unity-versioning';
+import Versioning from './versioning';
 import { GitRepoReader } from './input-readers/git-repo';
 import { GithubCliReader } from './input-readers/github-cli';
 import { Cli } from './cli/cli';
@@ -26,6 +27,8 @@ class BuildParameters {
   public buildPath!: string;
   public buildFile!: string;
   public buildMethod!: string;
+  public buildVersion!: string;
+  public androidVersionCode!: string;
   public androidKeystoreName!: string;
   public androidKeystoreBase64!: string;
   public androidKeystorePass!: string;
@@ -81,6 +84,8 @@ class BuildParameters {
   static async create(): Promise<BuildParameters> {
     const buildFile = this.parseBuildFile(Input.buildName, Input.targetPlatform, Input.androidExportType);
     const editorVersion = UnityVersioning.determineUnityVersion(Input.projectPath, Input.unityVersion);
+    const buildVersion = await Versioning.determineBuildVersion(Input.versioningStrategy, Input.specifiedVersion);
+    const androidVersionCode = AndroidVersioning.determineVersionCode(buildVersion, Input.androidVersionCode);
     const androidSdkManagerParameters = AndroidVersioning.determineSdkManagerParameters(Input.androidTargetSdkVersion);
 
     const androidSymbolExportType = Input.androidSymbolType;
@@ -125,6 +130,8 @@ class BuildParameters {
       buildPath: `${Input.buildsPath}/${Input.targetPlatform}`,
       buildFile,
       buildMethod: Input.buildMethod,
+      buildVersion,
+      androidVersionCode,
       androidKeystoreName: Input.androidKeystoreName,
       androidKeystoreBase64: Input.androidKeystoreBase64,
       androidKeystorePass: Input.androidKeystorePass,

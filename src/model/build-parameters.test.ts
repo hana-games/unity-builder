@@ -1,3 +1,4 @@
+import Versioning from './versioning';
 import UnityVersioning from './unity-versioning';
 import AndroidVersioning from './android-versioning';
 import BuildParameters from './build-parameters';
@@ -13,6 +14,7 @@ afterEach(() => {
 });
 
 beforeEach(() => {
+  jest.spyOn(Versioning, 'determineBuildVersion').mockImplementation(async () => '1.3.37');
   process.env.UNITY_LICENSE = testLicense; // Todo - Don't use process.env directly, that's what the input model class is for.
 });
 
@@ -22,10 +24,32 @@ describe('BuildParameters', () => {
       await expect(BuildParameters.create()).resolves.not.toThrow();
     });
 
+    it('determines the version only once', async () => {
+      jest.spyOn(Versioning, 'determineBuildVersion').mockImplementation(async () => '1.3.37');
+      await BuildParameters.create();
+      await expect(Versioning.determineBuildVersion).toHaveBeenCalledTimes(1);
+    });
+
     it('determines the unity version only once', async () => {
       jest.spyOn(UnityVersioning, 'determineUnityVersion').mockImplementation(() => '2019.2.11f1');
       await BuildParameters.create();
       expect(UnityVersioning.determineUnityVersion).toHaveBeenCalledTimes(1);
+    });
+
+    it('returns the android version code with provided input', async () => {
+      const mockValue = '42';
+      jest.spyOn(Input, 'androidVersionCode', 'get').mockReturnValue(mockValue);
+      await expect(BuildParameters.create()).resolves.toEqual(
+        expect.objectContaining({ androidVersionCode: mockValue }),
+      );
+    });
+
+    it('returns the android version code from version by default', async () => {
+      const mockValue = '';
+      jest.spyOn(Input, 'androidVersionCode', 'get').mockReturnValue(mockValue);
+      await expect(BuildParameters.create()).resolves.toEqual(
+        expect.objectContaining({ androidVersionCode: '1003037' }),
+      );
     });
 
     it('determines the android sdk manager parameters only once', async () => {
