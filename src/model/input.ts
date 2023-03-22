@@ -130,18 +130,6 @@ class Input {
     return Input.getInput('customParameters') || '';
   }
 
-  static get versioningStrategy(): string {
-    return Input.getInput('versioning') || 'Semantic';
-  }
-
-  static get specifiedVersion(): string {
-    return Input.getInput('version') || '';
-  }
-
-  static get androidVersionCode(): string {
-    return Input.getInput('androidVersionCode') || '';
-  }
-
   static get androidAppBundle(): boolean {
     core.warning('androidAppBundle is deprecated, please use androidExportType instead');
     const input = Input.getInput('androidAppBundle') || false;
