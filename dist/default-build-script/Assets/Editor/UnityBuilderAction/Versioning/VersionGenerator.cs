@@ -4,6 +4,7 @@
   {
     public static string Generate()
     {
+      UnityEngine.Debug.Log("[SDKOPRST] 6");
       return Git.GenerateSemanticCommitVersion();
     }
   }
