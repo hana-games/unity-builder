@@ -32,6 +32,15 @@ class Docker {
     }
   }
 
+  static addAllocation(value: string, allocation: number): string {
+    // In value it can have multiple values of /tmp/runner
+    // We need to replace all of them
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace
+    return value.replace(/\/tmp\/runner/g, `/tmp/runner${allocation}`);
+  }
+
+  // Does addAllocation replace every match ? : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace
+
   static getLinuxCommand(
     image: string,
     parameters: DockerParameters,
@@ -47,15 +56,18 @@ class Docker {
     if (!existsSync(githubWorkflow)) mkdirSync(githubWorkflow);
     const commandPrefix = image === `alpine` ? `/bin/sh` : `/bin/bash`;
 
-    const actionFolderFormat = actionFolder.replace('/tmp/runner', `/tmp/runner${allocation}`);
-    const workspaceFormat = workspace.replace('/tmp/runner', `/tmp/runner${allocation}`);
-    const githubWorkflowFormat = githubWorkflow.replace('/tmp/runner', `/tmp/runner${allocation}`);
-    const githubHomeFormat = githubHome.replace('/tmp/runner', `/tmp/runner${allocation}`);
+    const actionFolderFormat = this.addAllocation(actionFolder, allocation);
+    const workspaceFormat = this.addAllocation(workspace, allocation);
+    const githubWorkflowFormat = this.addAllocation(githubWorkflow, allocation);
+    const githubHomeFormat = this.addAllocation(githubHome, allocation);
 
     return `docker run \
             --workdir /github/workspace \
             --rm \
-            ${ImageEnvironmentFactory.getEnvVarString(parameters, additionalVariables)} \
+            ${this.addAllocation(
+              ImageEnvironmentFactory.getEnvVarString(parameters, additionalVariables),
+              allocation,
+            )} \
             --env UNITY_SERIAL \
             --env GITHUB_WORKSPACE=/github/workspace \
             ${gitPrivateToken ? `--env GIT_PRIVATE_TOKEN="${gitPrivateToken}"` : ''} \
