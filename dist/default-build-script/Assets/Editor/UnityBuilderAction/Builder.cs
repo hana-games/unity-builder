@@ -14,7 +14,6 @@ namespace UnityBuilderAction
   {
     public static void BuildProject()
     {
-      UnityEngine.Debug.Log("[SDKOPRST] 0");
       // Gather values from args
       var options = ArgumentsParser.GetValidatedOptions();
 
@@ -30,7 +29,6 @@ namespace UnityBuilderAction
         }
       }
 
-      UnityEngine.Debug.Log("[SDKOPRST] 1");
       // Define BuildPlayer Options
       var buildPlayerOptions = new BuildPlayerOptions {
         scenes = scenes,
@@ -39,7 +37,6 @@ namespace UnityBuilderAction
         options = buildOptions
       };
 
-      UnityEngine.Debug.Log("[SDKOPRST] 2");
       // Set version for this build
       VersionApplicator.SetVersion(options["buildVersion"]);
       
@@ -50,7 +47,6 @@ namespace UnityBuilderAction
         AndroidSettings.Apply(options);
       }
       
-      UnityEngine.Debug.Log("[SDKOPRST] 3");
       // Execute default AddressableAsset content build, if the package is installed.
       // Version defines would be the best solution here, but Unity 2018 doesn't support that,
       // so we fall back to using reflection instead.
@@ -81,7 +77,6 @@ namespace UnityBuilderAction
       // Result
       BuildResult result = summary.result;
       StdOutReporter.ExitWithResult(result);
-      UnityEngine.Debug.Log("[SDKOPRST] 5");
     }
   }
 }
