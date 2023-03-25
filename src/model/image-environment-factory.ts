@@ -38,6 +38,7 @@ class ImageEnvironmentFactory {
       { name: 'BUILD_FILE', value: parameters.buildFile },
       { name: 'BUILD_METHOD', value: parameters.buildMethod },
       { name: 'VERSION', value: parameters.buildVersion },
+      { name: 'GAME_VERSION', value: parameters.buildVersion },
       { name: 'ANDROID_VERSION_CODE', value: parameters.androidVersionCode },
       { name: 'ANDROID_KEYSTORE_NAME', value: parameters.androidKeystoreName },
       { name: 'ANDROID_KEYSTORE_BASE64', value: parameters.androidKeystoreBase64 },

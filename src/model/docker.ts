@@ -39,8 +39,6 @@ class Docker {
     return value.replace(/\/tmp\/runner/g, `/tmp/runner${allocation}`);
   }
 
-  // Does addAllocation replace every match ? : https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace
-
   static getLinuxCommand(
     image: string,
     parameters: DockerParameters,
@@ -69,6 +67,7 @@ class Docker {
               allocation,
             )} \
             --env UNITY_SERIAL \
+            --env GAME_VERSION \
             --env GITHUB_WORKSPACE=/github/workspace \
             ${gitPrivateToken ? `--env GIT_PRIVATE_TOKEN="${gitPrivateToken}"` : ''} \
             ${sshAgent ? '--env SSH_AUTH_SOCK=/ssh-agent' : ''} \
