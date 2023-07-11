@@ -215,6 +215,8 @@ inputs:
 outputs:
   volume:
     description: 'The Persistent Volume (PV) where the build artifacts have been stored by Kubernetes'
+  buildPath:
+    description: 'The path to the build artifacts'
   buildVersion:
     description: 'The generated version used for the Unity build'
   androidVersionCode:
