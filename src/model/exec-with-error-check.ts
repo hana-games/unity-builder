@@ -1,4 +1,5 @@
 import { getExecOutput, ExecOptions } from '@actions/exec';
+import * as core from '@actions/core';
 
 export async function execWithErrorCheck(
   commandLine: string,
@@ -13,6 +14,10 @@ export async function execWithErrorCheck(
   if (match) {
     const buildResults = match[1];
     const errorMatch = buildResults.match(/^Errors:\s*(\d+)$/m);
+    const buildPath = buildResults.match(/^FullBuildPath:\s*(.+)$/m);
+    if (buildPath && buildPath[1]) {
+      core.setOutput('buildPath', buildPath[1]);
+    }
     if (errorMatch && Number.parseInt(errorMatch[1], 10) !== 0) {
       throw new Error(`There was an error building the project. Please read the logs for details.`);
     }
