@@ -59,6 +59,11 @@ class Docker {
     const githubWorkflowFormat = this.addAllocation(githubWorkflow, allocation);
     const githubHomeFormat = this.addAllocation(githubHome, allocation);
 
+    const environmentVariables = Object.keys(process.env)
+      .filter((key) => key.startsWith('GAME_'))
+      .map((key) => `--env ${key}="${process.env[key]}"`)
+      .join(' ');
+
     return `docker run \
             --workdir /github/workspace \
             --rm \
@@ -69,6 +74,7 @@ class Docker {
             --env UNITY_SERIAL \
             --env GAME_VERSION \
             --env GITHUB_WORKSPACE=/github/workspace \
+            ${environmentVariables} \
             ${gitPrivateToken ? `--env GIT_PRIVATE_TOKEN="${gitPrivateToken}"` : ''} \
             ${sshAgent ? '--env SSH_AUTH_SOCK=/ssh-agent' : ''} \
             --volume "${githubHomeFormat}":"/root:z" \
