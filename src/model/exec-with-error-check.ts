@@ -18,6 +18,10 @@ export async function execWithErrorCheck(
     if (buildPath && buildPath[1]) {
       core.setOutput('buildPath', buildPath[1]);
     }
+    const artifactName = buildResults.match(/^ArtifactName:\s*(.+)$/m);
+    if (artifactName && artifactName[1]) {
+      core.setOutput('artifactName', artifactName[1]);
+    }
     if (errorMatch && Number.parseInt(errorMatch[1], 10) !== 0) {
       throw new Error(`There was an error building the project. Please read the logs for details.`);
     }
